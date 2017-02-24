@@ -84,6 +84,7 @@ relationship.prototype.addToSchema = function (schema) {
 		return keystone.list(field.options.ref);
 	});
 	this.bindUnderscoreMethods();
+	
 };
 
 /**
