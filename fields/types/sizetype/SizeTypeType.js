@@ -10,23 +10,23 @@ var definePrototypeGetters = require('../../utils/definePrototypeGetters');
  * @extends Field
  * @api public
  */
-function relationship (list, path, options) {
-	this.many = (options.many) ? true : false;
+function sizetype (list, path, options) {
+	this.many = true;
 	this.filters = options.filters;
 	this.createInline = (options.createInline) ? true : false;
 	this._defaultSize = 'full';
 	this._nativeType = keystone.mongoose.Schema.Types.ObjectId;
 	this._underscoreMethods = ['format', 'getExpandedData'];
 	this._properties = ['isValid', 'many', 'filters', 'createInline'];
-	relationship.super_.call(this, list, path, options);
+	sizetype.super_.call(this, list, path, options);
 }
-relationship.properName = 'Relationship';
-util.inherits(relationship, FieldType);
+sizetype.properName = 'SizeType';
+util.inherits(sizetype, FieldType);
 
 /**
  * Get client-side properties to pass to react field.
  */
-relationship.prototype.getProperties = function () {
+sizetype.prototype.getProperties = function () {
 	var refList = this.refList;
 	return {
 		refList: {
@@ -54,7 +54,7 @@ function truthy (value) {
 	return value;
 }
 
-relationship.prototype.getExpandedData = function (item) {
+sizetype.prototype.getExpandedData = function (item) {
 	var value = item.get(this.path);
 	if (this.many) {
 		if (!value || !Array.isArray(value)) return [];
@@ -67,11 +67,11 @@ relationship.prototype.getExpandedData = function (item) {
 /**
  * Registers the field on the List's Mongoose Schema.
  */
-relationship.prototype.addToSchema = function (schema) {
+sizetype.prototype.addToSchema = function (schema) {
 	var field = this;
 	var def = {
 		type: this._nativeType,
-		ref: this.options.ref,
+		
 		index: (this.options.index ? true : false),
 		required: (this.options.required ? true : false),
 		unique: (this.options.unique ? true : false),
@@ -90,7 +90,7 @@ relationship.prototype.addToSchema = function (schema) {
 /**
  * Gets the field's data from an Item, as used by the React components
  */
-relationship.prototype.getData = function (item) {
+sizetype.prototype.getData = function (item) {
 	var value = item.get(this.path);
 	if (this.many) {
 		return Array.isArray(value) ? value : [];
@@ -102,7 +102,7 @@ relationship.prototype.getData = function (item) {
 /**
  * Add filters to a query
  */
-relationship.prototype.addFilterToQuery = function (filter) {
+sizetype.prototype.addFilterToQuery = function (filter) {
 	var query = {};
 	if (!Array.isArray(filter.value)) {
 		if (typeof filter.value === 'string' && filter.value) {
@@ -126,7 +126,7 @@ relationship.prototype.addFilterToQuery = function (filter) {
 /**
  * Formats the field value
  */
-relationship.prototype.format = function (item) {
+sizetype.prototype.format = function (item) {
 	var value = item.get(this.path);
 	// force the formatted value to be a string - unexpected things happen with ObjectIds.
 	return this.many ? value.join(', ') : (value || '') + '';
@@ -139,7 +139,7 @@ relationship.prototype.format = function (item) {
  * TODO: we're just testing for strings here, so actual MongoID Objects (from
  * mongoose) would fail validation. not sure if this is an issue.
  */
-relationship.prototype.validateInput = function (data, callback) {
+sizetype.prototype.validateInput = function (data, callback) {
 	var value = this.getValueFromData(data);
 	var result = false;
 	if (value === undefined || value === null || value === '') {
@@ -167,7 +167,7 @@ relationship.prototype.validateInput = function (data, callback) {
 /**
  * Asynchronously confirms that the provided value is present
  */
-relationship.prototype.validateRequiredInput = function (item, data, callback) {
+sizetype.prototype.validateRequiredInput = function (item, data, callback) {
 	var value = this.getValueFromData(data);
 	var result = false;
 	if (value === undefined) {
@@ -200,7 +200,7 @@ relationship.prototype.validateRequiredInput = function (item, data, callback) {
  *
  * Deprecated
  */
-relationship.prototype.inputIsValid = function (data, required, item) {
+sizetype.prototype.inputIsValid = function (data, required, item) {
 	if (!required) return true;
 	if (!(this.path in data) && item && ((this.many && item.get(this.path).length) || item.get(this.path))) return true;
 	if (typeof data[this.path] === 'string') {
@@ -216,42 +216,45 @@ relationship.prototype.inputIsValid = function (data, required, item) {
  * Treats an empty string as a null value.
  * If data object does not contain the path field, then delete the field.
  */
-relationship.prototype.updateItem = function (item, data, callback) {
-	if (item.populated(this.path)) {
-		throw new Error('fieldTypes.relationship.updateItem() Error - You cannot update populated relationships.');
-	}
-	if (this.many) {
-		var arr = item.get(this.path);
-		var _old = arr.map(function (i) { return String(i); });
-		var _new = data[this.path];
-		if (!utils.isArray(_new)) {
-			_new = String(_new || '').split(',');
+sizetype.prototype.updateItem = function (item, data, callback) {
+	if(data.identifier==1){
+		if (item.populated(this.path)) {
+			throw new Error('fieldTypes.sizetype.updateItem() Error - You cannot update populated sizetypes.');
 		}
-		_new = _.compact(_new);
-		// Only update if the lists aren't the same
-		if (!_.isEqual(_old, _new)) {
-			item.set(this.path, _new);
-		}
-	} else {
-		if (data[this.path]) {
-			if (data[this.path] !== item.get(this.path)) {
-				item.set(this.path, data[this.path]);
+		if (this.many) {
+			var arr = item.get(this.path);
+			var _old = arr.map(function (i) { return String(i); });
+			var _new = data[this.path];
+			if (!utils.isArray(_new)) {
+				_new = String(_new || '').split(',');
 			}
-		} else if (item.get(this.path)) {
-			item.set(this.path, null);
+			_new = _.compact(_new);
+			// Only update if the lists aren't the same
+			if (!_.isEqual(_old, _new)) {
+				item.set(this.path, _new);
+			}
+		} else {
+			if (data[this.path]) {
+				if (data[this.path] !== item.get(this.path)) {
+					item.set(this.path, data[this.path]);
+				}
+			} else if (item.get(this.path)) {
+				item.set(this.path, null);
+			}
 		}
+		
 	}
 	process.nextTick(callback);
 };
 
-definePrototypeGetters(relationship, {
-	// Returns true if the relationship configuration is valid
+definePrototypeGetters(sizetype, {
+	// Returns true if the sizetype configuration is valid
 	isValid: function () {
-		return keystone.list(this.options.ref) ? true : false;
+		return true ;
 	},
 	// Returns the Related List
 	refList: function () {
-		return keystone.list(this.options.ref);
+		return "";
 	},
 	// Whether the field has any filters defined
 	hasFilters: function () {
@@ -260,4 +263,4 @@ definePrototypeGetters(relationship, {
 });
 
 /* Export Field Type */
-module.exports = relationship;
+module.exports = sizetype;
