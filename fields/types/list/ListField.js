@@ -5,6 +5,7 @@ import { css, StyleSheet } from 'aphrodite/no-important';
 import React from 'react';
 import Field from '../Field';
 import Domify from 'react-domify';
+import _ from 'lodash';
 
 import { Fields } from 'FieldTypes';
 import { Button, GlyphButton } from '../../../admin/client/App/elemental';
@@ -78,6 +79,22 @@ module.exports = Field.create({
 				return React.createElement(InvalidFieldType, { type: field.type, path: field.path, key: field.path });
 			}
 			const props = assign({}, field);
+			
+			//********************
+			//Adding type from parent for filtering in relationship child
+			_.forEach(field.filters,(v,k)=>{
+				if (typeof v === 'string' && v[0] === ':') {
+					var fieldName = v.slice(1);
+
+					var val = this.props.values[fieldName];
+					if (val) {
+						value[fieldName] = val;
+						return;
+					}
+				}
+			})
+			//********************
+			
 			props.value = value[field.path];
 			props.values = value;
 			props.onChange = this.handleFieldChange.bind(this, index);

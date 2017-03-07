@@ -53,8 +53,10 @@ module.exports = Field.create({
 	},
 	componentWillUpdate (nextProps) {
 		// Show the new filename when it's finished uploading
-		if (this.props.value.filename !== nextProps.value.filename) {
-			this.setState(buildInitialState(nextProps));
+		if(this.props.value){
+			if (this.props.value.filename !== nextProps.value.filename) {
+				this.setState(buildInitialState(nextProps));
+			}
 		}
 	},
 
@@ -122,11 +124,18 @@ module.exports = Field.create({
 	// ==============================
 
 	renderFileNameAndChangeMessage () {
+		console.log(this)
 		const href = this.props.value ? this.props.value.url : undefined;
+		var dir = null
+		if(this.props.value) dir = window.location.origin+'/'+Keystone.brand.toLowerCase()+'/'+window.location.pathname.split('/')[2]+'/'+this.props.value.filename;
+		
 		return (
 			<div>
+				{(this.hasFile() && !this.state.removeExisting && this.props.path=="image") ? (<img className='file-icon' src={dir}></img>):null}
 				{(this.hasFile() && !this.state.removeExisting) ? (
+					
 					<FileChangeMessage href={href} target="_blank">
+					
 						{this.getFilename()}
 					</FileChangeMessage>
 				) : null}

@@ -1,11 +1,19 @@
-var Field = require('../Field'),
-	React = require('react'),
-	Select = require('react-select'),
-	superagent = require('superagent');
-
+import Field from '../Field';
+import React from 'react';
+import Select from 'react-select';
+import superagent from 'superagent';
+import {
+	Button,
+	FormField,
+	FormInput,
+	FormNote,
+} from '../../../admin/client/App/elemental';
 
 module.exports = Field.create({
-	
+	statics: {
+		type: 'ColorBar'
+		
+	},
 	//fired everytime the actual value is changed
 	valueChanged: function() {
 		console.log('valueChanged');
@@ -62,7 +70,7 @@ module.exports = Field.create({
 	},
 	getOptions: function(model, callback) {
 		superagent
-			.get('/api/' + model + '/list?context=relationship&list='+model+'&field=type&limit=2000&filters[type]='+this.props.values.types)
+			.get('/api/' + model + '/list?context=relationship&list='+model+'&field=type&limit=2000&filters[type]='+this.props.values.type)
 			.set('Accept', 'application/json')
 			.end(function (err, res) {
 				if (err) throw err;
@@ -70,6 +78,7 @@ module.exports = Field.create({
 			});
 	},
 	getInitialState: function() {
+		console.log(this)
 		return {
 			ready: false,
 			colors: {},
@@ -122,7 +131,9 @@ module.exports = Field.create({
 			}
 	    }
 	    if(value && this.state.ready && this.state.init){
-	    	
+	    	this.setState({
+				init:false
+			})
 	    	var base = value['base'];
 	    	var supp = value['supp'];
 	    	for(var i=0;i<base.length;i++){
@@ -312,13 +323,12 @@ module.exports = Field.create({
 		}
 	},
 	
-	renderUI: function () {
-		console.log("renderUI");
+	renderField: function () {
+		
 		if(true){
 			return (
-					<div className="field">
-						<label className="field-label">{this.props.label}</label>
-						<div className="field-ui">
+					
+						<div >
 							
 							<div id="table"></div>
 							<a href="#" id="addRow" className="btn btn-default" >Add row</a>
@@ -326,7 +336,7 @@ module.exports = Field.create({
 							
 							<input type="hidden" ref="focusTarget" name={this.props.path} placeholder={this.props.placeholder} value={this.props.value} className="form-control" />
 						</div>
-					</div>
+					
 			);
 		}else return this.renderLoadingUI();
 	}
