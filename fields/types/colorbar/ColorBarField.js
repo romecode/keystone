@@ -16,7 +16,6 @@ module.exports = Field.create({
 	},
 	//fired everytime the actual value is changed
 	valueChanged: function() {
-		console.log('valueChanged');
 		this.setState({
 			init:false
 		})
@@ -70,7 +69,7 @@ module.exports = Field.create({
 	},
 	getOptions: function(model, callback) {
 		superagent
-			.get('/api/' + model + '/list?context=relationship&list='+model+'&field=type&limit=2000&filters[type]='+this.props.values.type)
+			.get('/api/' + model + '/list?context=relationship&list='+model+'&field=type&limit=2000&filters[type]='+this.state.type)
 			.set('Accept', 'application/json')
 			.end(function (err, res) {
 				if (err) throw err;
@@ -78,13 +77,13 @@ module.exports = Field.create({
 			});
 	},
 	getInitialState: function() {
-		console.log(this)
+		
 		return {
 			ready: false,
 			colors: {},
 			patterns: {},
-			init:true
-			
+			init:true,
+			type:this.props.values.type
 		};
 	},
 	renderLoadingUI: function() {
@@ -94,7 +93,6 @@ module.exports = Field.create({
 		
 		var value = this.props.value;
 		if(value){value=JSON.parse(value)};
-		console.log("componentDidUpdate");
 		var self = this;
 		var table = $("#table");
 		
@@ -181,7 +179,6 @@ module.exports = Field.create({
 	},
 	
 	componentDidMount:function(){
-		console.log("componentDidMount");
 		var self =this;
 		
 		var colors={};

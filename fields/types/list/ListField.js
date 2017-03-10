@@ -89,7 +89,7 @@ module.exports = Field.create({
 					var val = this.props.values[fieldName];
 					if (val) {
 						value[fieldName] = val;
-						return;
+						
 					}
 				}
 			})
