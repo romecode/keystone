@@ -236,11 +236,13 @@ module.exports = Field.create({
 	    	_parent.sortable({update:function(){self.valueChanged()}});
 	        _parent.disableSelection();
 	        self.valueChanged();
+	        return false
 	    });
 	    $('body').on('click', '#remove', function(e) {
 	    	e.preventDefault();
 	    	window.colorbar.el.parents('.color-row').remove();
 	    	self.valueChanged();
+	    	return false
 	    });
 	    $('#addRow').click(function() {
 	    	var table = $("#table");
@@ -251,6 +253,7 @@ module.exports = Field.create({
 	        _parent.append(_child);
 	        table.prepend(_parent);   
 	        self.valueChanged();
+	        return false
 	    });
 	    $('body').on('change', '#colors', function() {
 	    	var id = this.value;
@@ -268,12 +271,14 @@ module.exports = Field.create({
 	    		window.colorbar.el.attr('pattern-id',id);
 	    	}
 	    	self.valueChanged();
+	    	return false
 			
 	    });
 	    $('body').on('keyup', '#desc', function(e) {
 	    	
         	window.colorbar.el.html(this.value);
         	self.valueChanged();
+        	return false
 	    });
 		
 		window.colorbar={
