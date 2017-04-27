@@ -2,6 +2,7 @@ import Field from '../Field';
 import React from 'react';
 import Select from 'react-select';
 import superagent from 'superagent';
+import Color from 'color';
 import {
 	Button,
 	FormField,
@@ -53,6 +54,7 @@ module.exports = Field.create({
 			}else if(el.hasClass('col-split')){
 				obj.push([parseTable(el.children(),obj)])
 			}else if(el.hasClass('base')){
+				
 				obj['base'].push({v:el.html(),color:getBackground(el),pattern:getPattern(el)})
 			}else if(el.hasClass('child')){
 				return {v:el.html(),color:getBackground(el),pattern:getPattern(el)}
@@ -157,7 +159,9 @@ module.exports = Field.create({
         	    	this.el.removeAttr('color-id');
         	    	this.el.removeAttr('pattern-id');
         	    	if(!this.parent.state.patterns[id]){
-        	    		this.el.css('background-color',"#"+this.parent.state.colors[id]['hex_code']);
+        	    		var color = "#"+this.parent.state.colors[id]['hex_code'];
+        	    		this.el.css('background-color',color);
+        	    		this.el.css('color',Color(color).light() ? "black":"white");
         	    		this.el.attr('color-id',id);
         	    	}else{
         	    		var url = "url('/"+this.ep+"/patterns/"+this.parent.state.patterns[id]['filename']+"')";
@@ -212,7 +216,9 @@ module.exports = Field.create({
 	            	_child.attr('pattern-id',_item[0][_type]);
 	            	
 	            }else if (_type == 'color'){
-	            	_child.css({'background-color':"#"+self.state.colors[_item[0][_type]]['hex_code']})
+	            	var color = "#"+self.state.colors[_item[0][_type]]['hex_code'];
+	            	_child.css('color',Color(color).light() ? "black":"white");
+	            	_child.css({'background-color':color})
 	            	_child.attr('color-id',_item[0][_type]);
 	            }
 	            _child.html(_v);
@@ -243,7 +249,9 @@ module.exports = Field.create({
 	            	_child.attr('pattern-id',base[i][_type]);
 	            	
 	            }else if(_type == 'color'){
-	            	_child.css({'background-color':"#"+this.state.colors[base[i][_type]]['hex_code']})
+	            	var color = "#"+this.state.colors[base[i][_type]]['hex_code'];
+	            	_child.css('color',Color(color).light() ? "black":"white");
+	            	_child.css({'background-color':color})
 	            	_child.attr('color-id',base[i][_type]);
 	            }
 	            _child.html(_v);
