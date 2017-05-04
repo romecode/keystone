@@ -157,6 +157,7 @@ module.exports = Field.create({
         	    	this.el.css('background-color','');
         	    	this.el.css('background-image','');
         	    	this.el.removeAttr('color-id');
+        	    	this.el.removeClass("patternText");
         	    	this.el.removeAttr('pattern-id');
         	    	if(!this.parent.state.patterns[id]){
         	    		var color = "#"+this.parent.state.colors[id]['hex_code'];
@@ -166,6 +167,7 @@ module.exports = Field.create({
         	    	}else{
         	    		var url = "url('/"+this.ep+"/patterns/"+this.parent.state.patterns[id]['filename']+"')";
         	    		this.el.css('background-image',url);
+        	    		this.el.addClass("patternText");
         	    		this.el.attr('pattern-id',id);
         	    	}
         	    	this.parent.valueChanged();
@@ -212,6 +214,7 @@ module.exports = Field.create({
 
 				if(_type == 'pattern'){
 					var url = "url('/"+ep+"/patterns/"+self.state.patterns[_item[0][_type]].filename+"')";
+					_child.addClass("patternText");
 	            	_child.css({'background-image':url})
 	            	_child.attr('pattern-id',_item[0][_type]);
 	            	
@@ -246,6 +249,7 @@ module.exports = Field.create({
 	            if(_type == 'pattern'){
 	            	var url = "url('/"+ep+"/patterns/"+this.state.patterns[base[i][_type]]['filename']+"')";
 	            	_child.css({'background-image':url})
+	            	_child.addClass("patternText");
 	            	_child.attr('pattern-id',base[i][_type]);
 	            	
 	            }else if(_type == 'color'){
