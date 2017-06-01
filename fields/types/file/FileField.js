@@ -128,12 +128,13 @@ module.exports = Field.create({
 		var dir = null;
 		var split = null;
 		var preview = null;
-		//horrid hackaround
-		if(this.props.value && this.props.value.mimetype){
+		
+		if(this.props.value && (this.props.value.mimetype && this.props.value.mimetype.startsWith("image"))){
+			
 			split = this.props.path.split('_')[1];
 			split ? split=split+'/'+this.props.value.filename : split=this.props.value.filename;
 			dir = window.location.origin+'/'+Keystone.brand.toLowerCase()+'/'+window.location.pathname.split('/')[2]+'/'+ split;
-			this.props.value.mimetype.startsWith("image") ? preview=(<img className='file-icon' src={dir}></img>):null;
+			preview=(<img className='file-icon' src={dir}></img>);
 		}
 
 		return (
