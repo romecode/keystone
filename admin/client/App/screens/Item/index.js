@@ -12,6 +12,7 @@ import { Link } from 'react-router';
 
 import { listsByKey } from '../../../utils/lists';
 import CreateForm from '../../shared/CreateForm';
+import DuplicateForm from '../../shared/DuplicateForm';
 import Alert from '../../elemental/Alert';
 import EditForm from './components/EditForm';
 import EditFormHeader from './components/EditFormHeader';
@@ -35,6 +36,7 @@ var ItemView = React.createClass({
 	getInitialState () {
 		return {
 			createIsOpen: false,
+			duplicateIsOpen: false,
 		};
 	},
 	componentDidMount () {
@@ -63,6 +65,7 @@ var ItemView = React.createClass({
 	onCreate (item) {
 		// Hide the create form
 		this.toggleCreateModal(false);
+		this.toggleDuplicateModal(false);
 		// Redirect to newly created item path
 		const list = this.props.currentList;
 		this.context.router.push(`${Keystone.adminPath}/${list.path}/${item.id}`);
@@ -71,6 +74,12 @@ var ItemView = React.createClass({
 	toggleCreateModal (visible) {
 		this.setState({
 			createIsOpen: visible,
+		});
+	},
+	toggleDuplicateModal (visible) {
+		
+		this.setState({
+			duplicateIsOpen: visible,
 		});
 	},
 	// Render this items relationships
@@ -151,7 +160,7 @@ var ItemView = React.createClass({
 				</Center>
 			);
 		}
-
+		
 		// When we have the data, render the item view with it
 		return (
 			<div data-screen-id="item">
@@ -162,12 +171,20 @@ var ItemView = React.createClass({
 								list={this.props.currentList}
 								data={this.props.data}
 								toggleCreate={this.toggleCreateModal}
+								toggleDuplicate={this.toggleDuplicateModal}
 							/>
 							<CreateForm
 								list={this.props.currentList}
 								isOpen={this.state.createIsOpen}
 								onCancel={() => this.toggleCreateModal(false)}
 								onCreate={(item) => this.onCreate(item)}
+							/>
+							<DuplicateForm
+								list={this.props.currentList}
+								isOpen={this.state.duplicateIsOpen}
+								onCancel={() => this.toggleDuplicateModal(false)}
+								onCreate={(item) => this.onCreate(item)}
+								data={this.props.data}
 							/>
 							<EditForm
 								list={this.props.currentList}

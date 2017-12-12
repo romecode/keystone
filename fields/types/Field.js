@@ -32,6 +32,7 @@ var Base = module.exports.Base = {
 			labelProps: {},
 			valueProps: {},
 			size: 'full',
+			duplicate: "wee",
 		};
 	},
 	getInputName (path) {
@@ -64,6 +65,7 @@ var Base = module.exports.Base = {
 		return <FormNote html={this.props.note} />;
 	},
 	renderField () {
+
 		const { autoFocus, value, inputProps } = this.props;
 		return (
 			<FormInput {...{
@@ -87,7 +89,7 @@ var Base = module.exports.Base = {
 			{ 'field-monospace': this.props.monospace }
 		);
 		return (
-			<FormField htmlFor={this.props.path} label={this.props.label} className={wrapperClassName} cropLabel>
+			<FormField htmlFor={this.props.path} label={this.props.label} className={wrapperClassName} cropLabel style={this.props.style}>
 				<div className={'FormField__inner field-size-' + this.props.size}>
 					{this.shouldRenderField() ? this.renderField() : this.renderValue()}
 				</div>

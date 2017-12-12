@@ -42,6 +42,7 @@ module.exports = Field.create({
 		onChange: React.PropTypes.func.isRequired,
 		path: React.PropTypes.string.isRequired,
 		value: React.PropTypes.array,
+		duplicate: React.PropTypes.boolean,
 	},
 	addItem () {
 		const { path, value, onChange } = this.props;
@@ -136,7 +137,7 @@ module.exports = Field.create({
 	renderUI () {
 		const { label, value } = this.props;
 		return (
-			<div className={css(classes.container)}>
+			<div className={css(classes.container)} style={this.props.style}>
 				<h3 data-things="whatever">{label}</h3>
 				{this.shouldRenderField() ? (
 					this.renderItems()

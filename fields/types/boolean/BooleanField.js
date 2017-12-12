@@ -39,7 +39,7 @@ module.exports = Field.create({
 		const { indent, value, label, path } = this.props;
 
 		return (
-			<div data-field-name={path} data-field-type="boolean">
+			<div data-field-name={path} data-field-type="boolean" style={this.props.style}>
 				<FormField offsetAbsentLabel={indent}>
 					<label style={{ height: '2.3em' }}>
 						{this.renderFormInput()}

@@ -25,6 +25,9 @@ export const EditFormHeader = React.createClass({
 	toggleCreate (visible) {
 		this.props.toggleCreate(visible);
 	},
+	toggleDuplicate (visible) {
+		this.props.toggleDuplicate(visible,this.props.data);
+	},
 	searchStringChanged (event) {
 		this.setState({
 			searchString: event.target.value,
@@ -124,9 +127,12 @@ export const EditFormHeader = React.createClass({
 		);
 	},
 	renderInfo () {
+		
 		return (
 			<ToolbarSection right>
+				{this.renderDuplicateButton()}
 				{this.renderCreateButton()}
+				
 			</ToolbarSection>
 		);
 	},
@@ -141,9 +147,25 @@ export const EditFormHeader = React.createClass({
 		} else {
 			props.onClick = () => { this.toggleCreate(true); };
 		}
+		
 		return (
 			<GlyphButton data-e2e-item-create-button="true" color="success" glyph="plus" position="left" {...props}>
 				<ResponsiveText hiddenXS={`New ${singular}`} visibleXS="Create" />
+			</GlyphButton>
+		);
+	},
+	renderDuplicateButton () {
+		const { duplicate, singular } = this.props.list;
+
+		if (!duplicate) return null;
+
+		let props = {};
+		props.onClick = () => { this.toggleDuplicate(true); };
+		
+		
+		return (
+			<GlyphButton data-e2e-item-duplicate-button="true" color="success" glyph="plus" position="left" {...props}>
+				<ResponsiveText hiddenXS={`Duplicate ${singular}`} visibleXS="Duplicate" />
 			</GlyphButton>
 		);
 	},

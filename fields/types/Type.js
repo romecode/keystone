@@ -29,6 +29,7 @@ var DEFAULT_OPTION_KEYS = [
 	'collapse',
 	'dependsOn',
 	'autoCleanup',
+	'noDuplicate'
 ];
 
 /**
@@ -109,10 +110,14 @@ Field.prototype.getOptions = function () {
 		if (_.isArray(this._properties)) {
 			optionKeys = optionKeys.concat(this._properties);
 		}
+		
 		optionKeys.forEach(function (key) {
+			
 			if (this[key]) {
+				
 				this.__options[key] = this[key];
 			} else if (this.options[key]) {
+				
 				this.__options[key] = this.options[key];
 			}
 		}, this);
@@ -121,6 +126,7 @@ Field.prototype.getOptions = function () {
 		}
 		this.__options.hasFilterMethod = this.addFilterToQuery ? true : false;
 		this.__options.defaultValue = this.getDefaultValue();
+		
 	}
 	return this.__options;
 };
