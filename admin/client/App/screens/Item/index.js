@@ -77,7 +77,7 @@ var ItemView = React.createClass({
 		});
 	},
 	toggleDuplicateModal (visible) {
-		
+		this.initializeItem(this.props.params.itemId);
 		this.setState({
 			duplicateIsOpen: visible,
 		});
